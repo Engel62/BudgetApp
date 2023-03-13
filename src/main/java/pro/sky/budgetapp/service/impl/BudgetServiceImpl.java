@@ -33,16 +33,29 @@ public class BudgetServiceImpl implements BudgetService {
     return SALARY - SAVING - getAllSpend();
     };
 
-    public void addTransaction(Transaction transaction) {
-      Map<Long,Transaction> monthTransactions =transactions.getOrDefault(LocalDate.now().getMonth(),new LinkedHashMap<>());
-        monthTransactions.put(lastId++, transaction);
-    }
 
+    @Override
+    public long addTransaction(Transaction transaction) {
+      Map<Long,Transaction> monthTransactions =transactions.getOrDefault(LocalDate.now().getMonth(),new LinkedHashMap<>());
+        monthTransactions.put(lastId, transaction);
+        return lastId++;
+    }
+    @Override
+    public Transaction getTransaction(long id ) {
+        for (Map<Long, Transaction> transactionsByMonth : transactions.values()) {
+            Transaction transaction = transactionsByMonth.get(id);
+            if (transaction != null) {
+                return transaction;
+            }
+        }
+        return null;
+    }
+    @Override
     public int getDailyBalance() {
         return DAILY_BUDGET * LocalDate.now().getDayOfMonth() - getAllSpend();
     }
-
-    private int getAllSpend() {
+    @Override
+    public int getAllSpend() {
         Map<Long,Transaction> monthTransactions =transactions.getOrDefault(LocalDate.now().getMonth(),new LinkedHashMap<>());
 
         int sum =0;
