@@ -38,6 +38,7 @@ public class BudgetServiceImpl implements BudgetService {
     public long addTransaction(Transaction transaction) {
       Map<Long,Transaction> monthTransactions =transactions.getOrDefault(LocalDate.now().getMonth(),new LinkedHashMap<>());
         monthTransactions.put(lastId, transaction);
+        transactions.put(LocalDate.now().getMonth(), monthTransactions);
         return lastId++;
     }
     @Override
@@ -49,6 +50,30 @@ public class BudgetServiceImpl implements BudgetService {
             }
         }
         return null;
+    }
+@Override
+    public Transaction editTransaction(long id, Transaction transaction) {
+        for (Map<Long, Transaction> transactionsByMonth : transactions.values()) {
+            if (transactionsByMonth.containsKey(id)) {
+                transactionsByMonth.put(id, transaction);
+                return transaction;
+            }
+        }
+        return null;
+    }
+    @Override
+    public  boolean deleteTransaction(long id) {
+        for (Map<Long, Transaction> transactionsByMonth : transactions.values()) {
+            if (transactionsByMonth.containsKey(id)) {
+                transactionsByMonth.remove(id);
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
+    public  void deleteAllTransaction() {
+       transactions = new TreeMap<>();
     }
     @Override
     public int getDailyBalance() {

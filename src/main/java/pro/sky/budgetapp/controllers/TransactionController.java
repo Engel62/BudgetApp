@@ -1,5 +1,4 @@
 package pro.sky.budgetapp.controllers;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.budgetapp.model.Transaction;
@@ -18,7 +17,7 @@ public class TransactionController {
     @PostMapping
     public ResponseEntity<Long> addTransaction(@RequestBody Transaction transaction) {
        long id = budgetService.addTransaction(transaction);
-return ResponseEntity.ok(id);
+    return ResponseEntity.ok(id);
     }
 
     @GetMapping("/{id}")
@@ -27,7 +26,29 @@ return ResponseEntity.ok(id);
         if (transaction == null) {
             ResponseEntity.notFound().build();
         }
-return ResponseEntity.ok(transaction);
+    return ResponseEntity.ok(transaction);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> editTransaction (@PathVariable long id, @RequestBody Transaction transaction) {
+        transaction = budgetService.editTransaction(id, transaction);
+        if (transaction == null) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(transaction);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable long id) {
+        if (budgetService.deleteTransaction(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void  > deleteAllTransaction() {
+        budgetService.deleteAllTransaction();
+        return ResponseEntity.ok().build();
+    }
 }
