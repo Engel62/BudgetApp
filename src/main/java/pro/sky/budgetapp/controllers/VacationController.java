@@ -15,7 +15,7 @@ public class VacationController {
         this.budgetService = budgetService;
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public int vacationBonus(@RequestParam int vacationDays) {
         return budgetService.getVacationBonus(vacationDays);
     }

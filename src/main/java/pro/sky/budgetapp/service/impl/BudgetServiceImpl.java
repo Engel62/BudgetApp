@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import pro.sky.budgetapp.model.Transaction;
 import pro.sky.budgetapp.service.BudgetService;
 import pro.sky.budgetapp.service.FilesService;
+
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.LinkedHashMap;
@@ -32,6 +34,14 @@ public class BudgetServiceImpl implements BudgetService {
         this.filesService = filesService;
     }
 
+    @PostConstruct
+    private void init() {
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public int getDailyBudget() {
         return DAILY_BUDGET;
@@ -51,6 +61,7 @@ public class BudgetServiceImpl implements BudgetService {
       LinkedHashMap<Long,Transaction> monthTransactions = (LinkedHashMap<Long, Transaction>) transactions.getOrDefault(LocalDate.now().getMonth(),new LinkedHashMap<>());
         monthTransactions.put(lastId, transaction);
         transactions.put(LocalDate.now().getMonth(), monthTransactions);
+        saveToFile();
         return lastId++;
     }
     @Override
@@ -68,9 +79,11 @@ public class BudgetServiceImpl implements BudgetService {
         for (Map<Long, Transaction> transactionsByMonth : transactions.values()) {
             if (transactionsByMonth.containsKey(id)) {
                 transactionsByMonth.put(id, transaction);
+                saveToFile();
                 return transaction;
             }
         }
+
         return null;
     }
     @Override
