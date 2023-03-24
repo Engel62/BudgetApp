@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pro.sky.budgetapp.service.FilesService;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +34,10 @@ public class FileServiceImpl  implements FilesService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+@Override
+    public File getDataDile() {
+        return new File(dataFilePath + "/" + dataFileName);
     }
 
     private boolean cleanDataFile() {
