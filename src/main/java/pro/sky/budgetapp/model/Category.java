@@ -1,6 +1,19 @@
 package pro.sky.budgetapp.model;
 
 public enum Category {
+    FOOD("Food"),
+    CLOTHES("Clothes"),
+    FUN("Fun"),
+    TRANSPORT("Transport"),
+    HOBBY("Hobby");
 
-    FOOD,CLOTHES,FUN,TRANSPORT,HOBBY
+    private final String text;
+
+    Category(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
 }

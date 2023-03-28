@@ -1,6 +1,7 @@
 package pro.sky.budgetapp.service;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public interface FilesService {
     boolean saveToFile(String json);
@@ -9,5 +10,7 @@ public interface FilesService {
 
     File getDataFile();
 
-    void cleanDataFile();
+    Path createTempFile(String suffix);
+
+    boolean cleanDataFile();
 }

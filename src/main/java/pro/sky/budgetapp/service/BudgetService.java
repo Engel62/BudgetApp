@@ -2,9 +2,13 @@ package pro.sky.budgetapp.service;
 
 import pro.sky.budgetapp.model.Transaction;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.time.Month;
+
 public interface BudgetService {
     int getDailyBudget();
-
     int getBalance();
 
     long addTransaction(Transaction transaction);
@@ -15,13 +19,17 @@ public interface BudgetService {
 
     boolean deleteTransaction(long id);
 
-    void deleteAllTransaction();
+    void deleteAllTransactions();
 
     int getDailyBalance();
 
     int getAllSpend();
 
-    int getVacationBonus(int dayCount);
+    int getVacationBonus(int daysCount);
 
-    int getSalaryWithVacation(int vocationDaysCount, int vacationWorkingDaysCount, int workingDaysInMonth);
+    int getSalaryWithVacation(int vacationDaysCount, int vacationWorkingDaysCount, int workingDaysInMonth);
+
+    Path createMonthlyReport(Month month) throws IOException;
+
+    void addTransactionsFromInputStream(InputStream inputStream) throws IOException;
 }

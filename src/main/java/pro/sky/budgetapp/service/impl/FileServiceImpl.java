@@ -9,14 +9,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 @Service
-public class FileServiceImpl  implements FilesService {
-@Value("${path.to.date.file}")
+public class FileServiceImpl implements FilesService {
+
+    @Value("${path.to.data.file}")
     private String dataFilePath;
 
-@Value("${name.of.data.file}")
+    @Value("${name.of.data.file}")
     private String dataFileName;
 
-@Override
+    @Override
     public boolean saveToFile(String json) {
         try {
             cleanDataFile();
@@ -25,23 +26,33 @@ public class FileServiceImpl  implements FilesService {
         } catch (IOException e) {
             return false;
         }
-
     }
-@Override
+
+    @Override
     public String readFromFile() {
         try {
-           return Files.readString(Path.of(dataFilePath, dataFileName));
+            return Files.readString(Path.of(dataFilePath, dataFileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-@Override
-    public File getDataDile() {
+
+    @Override
+    public File getDataFile() {
         return new File(dataFilePath + "/" + dataFileName);
     }
 
-    private boolean cleanDataFile() {
+    @Override
+    public Path createTempFile(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePath), "tempFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Override
+    public boolean cleanDataFile() {
         try {
             Path path = Path.of(dataFilePath, dataFileName);
             Files.deleteIfExists(path);
@@ -52,5 +63,4 @@ public class FileServiceImpl  implements FilesService {
             return false;
         }
     }
-
 }
